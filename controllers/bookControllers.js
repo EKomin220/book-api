@@ -22,7 +22,7 @@ exports.getBookById = async (request, response) => {
 
 exports.getBookByTitle = async (request, response) => {
     try {
-        const book = await Book.find({ title: request.params.title.toString()}).exec();
+        const book = await Book.find(request.params.title)
         if (!book){
             return response.status(404).send({error: "Book not found"})
         }
@@ -34,7 +34,8 @@ exports.getBookByTitle = async (request, response) => {
 
 exports.getBookByAuthorSurname = async (request, response) => {
     try {
-        const book = await Book.find({ authorSurname: request.params.authorSurname.toString()}).exec();
+        const surname = String(request.params.authorSurname);
+        const book = await Book.find({ "authorSurname" : { $regex : new RegExp(surname, "i") } })
         if (!book){
             return response.status(404).send({error: "Book not found"})
         }
@@ -43,7 +44,8 @@ exports.getBookByAuthorSurname = async (request, response) => {
         response.status(500).send({error: "Failed to find book."})
     }
 }
-//==========================================================
+ 
+
 exports.createBook = async (request, response) => {
     try {
         const book = new Book(request.body)

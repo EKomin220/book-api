@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {getAllBooks, getBookById, getBookByTitle, getBookByAuthorSurname, createBook, updateBookById, deleteBookById } = require("../controllers/bookController");
+const {getAllBooks, getBookById, getBookByTitle, getBookByAuthorSurname, createBook, updateBookById, deleteBookById } = require("../controllers/bookControllers");
 
 
 router.get("/", getAllBooks);
