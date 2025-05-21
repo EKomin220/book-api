@@ -20,31 +20,34 @@ exports.getBookById = async (request, response) => {
     }
 }
 
+//==== TODO: fix getBookByTitle + getBookByAuthorSurname ==========
 exports.getBookByTitle = async (request, response) => {
     try {
-        const book = await Book.find(request.params.title)
-        if (!book){
-            return response.status(404).send({error: "Book not found"})
+        const title = request.params.title;
+        const book = await Book.find({ "title": { $regex: new RegExp(title, "i") } });
+        if (!book || book.length === 0) {
+            return response.status(404).send({error: "Book not found"});
         }
-        response.send(book)
+        response.send(book);
     } catch (error) {
-        response.status(500).send({error: "Failed to find book."})
+        response.status(500).send({error: "Failed to find book."});
     }
 }
 
 exports.getBookByAuthorSurname = async (request, response) => {
     try {
-        const surname = String(request.params.authorSurname);
-        const book = await Book.find({ "authorSurname" : { $regex : new RegExp(surname, "i") } })
-        if (!book){
-            return response.status(404).send({error: "Book not found"})
+        const surname = request.params.authorSurname;
+        const book = await Book.find({ "authorSurname": { $regex: new RegExp(surname, "i") } });
+        if (!book || book.length === 0) {
+            return response.status(404).send({error: "Book not found"});
         }
-        response.send(book)
+        response.send(book);
     } catch (error) {
-        response.status(500).send({error: "Failed to find book."})
+        response.status(500).send({error: "Failed to find book."});
     }
 }
  
+//=========================================
 
 exports.createBook = async (request, response) => {
     try {
